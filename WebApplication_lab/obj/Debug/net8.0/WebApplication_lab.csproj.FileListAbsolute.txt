@@ -51,3 +51,4 @@ C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\obj\Debug\net8.0\refint\We
 C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\obj\Debug\net8.0\WebApplication_lab.pdb
 C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\obj\Debug\net8.0\WebApplication_lab.genruntimeconfig.cache
 C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\obj\Debug\net8.0\ref\WebApplication_lab.dll
+C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\obj\Debug\net8.0\WebApplication_lab.sourcelink.json
