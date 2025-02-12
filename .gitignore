@@ -1,27 +1,50 @@
-# Visual Studio files
+﻿# 🔹 Visual Studio та Rider
 .vs/
+.idea/
 *.suo
 *.user
+*.userosscache
+*.sln.docstates
+*.suo
 *.cache
 *.pdb
-*.obj
 *.log
 *.tlog
 *.ilk
 *.idb
 
-# Build directories
+# 🔹 Build папки
 bin/
 obj/
 out/
 Debug/
 Release/
 
-# NuGet packages
+# 🔹 ASP.NET специфічні файли
+App_Data/
+App_Backup/
+App_LocalResources/
+App_WebReferences/
+
+# 🔹 Конфігураційні файли (локальні)
+*.config
+*.csproj.user
+*.csproj.DotSettings
+
+# 🔹 Logs, Dump-файли
+*.log
+*.dmp
+
+# 🔹 NuGet
 *.nupkg
 packages/
 project.lock.json
+project.assets.json
 
-# User-specific files
-*.userosscache
-*.sln.docstates
+# 🔹 Entity Framework Migrations
+Migrations/
+
+# 🔹 Temp, Cache
+.tmp/
+*.tmp
+*.cache
