@@ -13,6 +13,11 @@
 *.ilk
 *.idb
 
+# Ігноруємо службові файли та компіляційні директорії
+WebApplication_lab/obj/
+WebApplication_lab/bin/
+WebApplication_lab/obj/Debug/
+WebApplication_lab/obj/Debug/net8.0/
 # 🔹 Build папки
 bin/
 obj/
