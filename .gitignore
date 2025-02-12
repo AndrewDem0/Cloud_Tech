@@ -1,1 +1,27 @@
+# Visual Studio files
 .vs/
+*.suo
+*.user
+*.cache
+*.pdb
+*.obj
+*.log
+*.tlog
+*.ilk
+*.idb
+
+# Build directories
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+
+# User-specific files
+*.userosscache
+*.sln.docstates
