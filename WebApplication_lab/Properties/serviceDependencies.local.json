@@ -9,12 +9,6 @@
       "type": "appInsights.azure",
       "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
       "dynamicId": null
-    },
-    "identityapp1": {
-      "connectionInfo": "App registration: WebAplication_lab_idp, Tenant: Default Directory (demedpsgmail.onmicrosoft.com - Microsoft Entra ID)",
-      "secretStore": "LocalSecretsFile",
-      "type": "identityapp.secretStore",
-      "connectionId": "AzureAD:ClientSecret"
     }
   }
 }
