@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+
 namespace WebApplication_lab
 {
     public class Program
@@ -5,6 +11,27 @@ namespace WebApplication_lab
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            //setting up authentication for the application using entra ID as the identity provider.
+            builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+
+            //here enabling authorization for the application's controllers. 
+            //The AddControllersWithViews method configures the application to use controllers with the views for handling HTTP requests.
+
+            builder.Services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+
+            // enabling Razor Pages for the application with Microsoft Identity UI integration. 
+            //The AddRazorPages method set up the Razor Pages support in application.
+            builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -25,12 +52,14 @@ namespace WebApplication_lab
 
             app.UseRouting();
 
+			app.UseAuthentication(); //for authentication
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            //app.MapRazorPages();
             app.Run();
         }
     }

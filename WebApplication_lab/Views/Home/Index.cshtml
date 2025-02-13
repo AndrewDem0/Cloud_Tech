@@ -1,8 +1,20 @@
-﻿@{
+﻿@using WebApplication_lab.Controllers
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+    <hr />
+    @if (User.Identity.IsAuthenticated)
+    {
+        var getUser = @HomeController.GetUserOnEntraID(User);
+
+        <h4> Entra ID User name: @getUser.user_name </h4>
+        <h4> Entra ID Email: @getUser.user_email </h4>
+
+    }
 </div>
