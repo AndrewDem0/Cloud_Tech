@@ -25,6 +25,20 @@
             }
         </tbody>
     </table>
+
+    <!-- Кнопка для завантаження -->
+    <form method="post" asp-action="DownloadResults">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <input type="hidden" name="model[@i].Name" value="@Model[i].Name" />
+            <input type="hidden" name="model[@i].Url" value="@Model[i].Url" />
+            <input type="hidden" name="model[@i].DataSource" value="@Model[i].DataSource" />
+            <input type="hidden" name="model[@i].MatchedText" value="@Model[i].MatchedText" />
+            <input type="hidden" name="model[@i].ConfidenceScore" value="@Model[i].ConfidenceScore" />
+        }
+        <button type="submit" class="btn btn-primary">Завантажити результати</button>
+    </form>
+
 }
 else
 {
