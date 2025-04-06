@@ -57,7 +57,6 @@ namespace WebApplication_lab.Controllers
                         Url = entityUrl,
                         DataSource = entity.DataSource,
                         MatchedText = matchedText,
-                        ConfidenceScore = entity.Matches.Any() ? (int)(entity.Matches.First().ConfidenceScore * 100) : 0
 
                     };
 
@@ -84,7 +83,7 @@ namespace WebApplication_lab.Controllers
 
                 foreach (var item in model)
                 {
-                    stringBuilder.AppendLine($"{item.Name}\t{item.Url}\t{item.DataSource}\t{item.MatchedText}\t{item.ConfidenceScore}");
+                    stringBuilder.AppendLine($"{item.Name}\t{item.Url}\t{item.DataSource}\t{item.MatchedText}\t");
                 }
 
                 var fileContent = stringBuilder.ToString();
