@@ -1,0 +1,41 @@
+﻿@model List<WebApplication_lab.Models.EntityLinkingResult>
+
+@{
+    ViewData["Title"] = "Entity Linking";
+}
+
+<h2>Entity Linking</h2>
+
+<!-- Форма для введення тексту -->
+<form method="post">
+    <label>Введіть текст для аналізу:</label><br />
+    <textarea name="inputText" rows="6" cols="70"></textarea><br />
+    <button type="submit">Аналізувати</button>
+</form>
+
+<!-- Виведення результатів, якщо вони є -->
+@if (Model != null && Model.Any())
+{
+    <h3>Результати:</h3>
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Назва сутності</th>
+                <th>Посилання</th>
+                <th>Джерело</th>
+                <th>Збіг</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><a href="@item.Url" target="_blank">@item.Url</a></td>
+                    <td>@item.DataSource</td>
+                    <td>@item.MatchedText</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

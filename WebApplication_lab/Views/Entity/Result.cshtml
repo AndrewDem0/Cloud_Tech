@@ -1,0 +1,32 @@
+﻿@model List<WebApplication_lab.Models.EntityLinkingResult>
+
+<h2>Результати Entity Linking</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Назва</th>
+                <th>Посилання</th>
+                <th>Джерело</th>
+                <th>Збіги</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><a href="@item.Url" target="_blank">@item.Url</a></td>
+                    <td>@item.DataSource</td>
+                    <td>@item.MatchedText</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Не знайдено жодних сутностей для цього тексту.</p>
+}
