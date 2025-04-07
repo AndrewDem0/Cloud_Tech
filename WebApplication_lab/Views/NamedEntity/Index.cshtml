@@ -9,6 +9,21 @@
         <label for="inputText">Введіть текст:</label>
         <textarea name="inputText" class="form-control" rows="6"></textarea>
     </div>
+
+     <div style="margin-top: 20px;">
+        <strong>Оберіть категорії для витягування:</strong><br />
+        <input type="checkbox" name="selectedCategories" value="Person" checked /> Person<br />
+        <input type="checkbox" name="selectedCategories" value="Location" /> Location<br />
+        <input type="checkbox" name="selectedCategories" value="Organization" /> Organization<br />
+        <input type="checkbox" name="selectedCategories" value="DateTime" /> DateTime<br />
+        <input type="checkbox" name="selectedCategories" value="Skill" /> Skill<br />
+        <input type="checkbox" name="selectedCategories" value="Quantity" /> Quantity<br />
+
+        <h4>Інші опції:</h4>
+        <input type="checkbox" name="showOptions" value="SubCategory" /> Показати підкатегорії<br />
+        <input type="checkbox" name="showOptions" value="Confidence" /> Показати точність<br />
+    </div>
+
     <br />
     <button type="submit" class="btn btn-primary">Розпізнати сутності</button>
 </form>
