@@ -10,12 +10,10 @@ namespace WebApplication_lab
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Додавання сервісів до контейнера DI (Dependency Injection)
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
-            // Налаштування middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

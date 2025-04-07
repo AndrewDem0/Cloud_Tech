@@ -1,0 +1,32 @@
+﻿@model List<WebApplication_lab.Models.NamedEntityResult>
+
+<h2>Результати розпізнавання сутностей</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Текст</th>
+                <th>Категорія</th>
+                <th>Підкатегорія</th>
+                <th>Точність (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entity in Model)
+            {
+                <tr>
+                    <td>@entity.Text</td>
+                    <td>@entity.Category</td>
+                    <td>@entity.SubCategory</td>
+                    <td>@entity.ConfidenceScore</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Не знайдено жодних сутностей.</p>
+}
