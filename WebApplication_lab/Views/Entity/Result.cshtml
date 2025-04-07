@@ -11,6 +11,7 @@
                 <th>Посилання</th>
                 <th>Джерело</th>
                 <th>Збіги</th>
+                <th>Точність</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td><a href="@item.Url" target="_blank">@item.Url</a></td>
                     <td>@item.DataSource</td>
                     <td>@item.MatchedText</td>
+                    <td>@item.ConfidenceScore%</td>
                 </tr>
             }
         </tbody>
@@ -34,6 +36,7 @@
             <input type="hidden" name="model[@i].Url" value="@Model[i].Url" />
             <input type="hidden" name="model[@i].DataSource" value="@Model[i].DataSource" />
             <input type="hidden" name="model[@i].MatchedText" value="@Model[i].MatchedText" />
+            <input type="hidden" name="model[@i].ConfidenceScore" value="@Model[i].ConfidenceScore" />
         }
         <button type="submit" class="btn btn-primary">Завантажити результати</button>
     </form>
