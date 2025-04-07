@@ -2,31 +2,43 @@
 
 <h2>Результати розпізнавання сутностей</h2>
 
-@if (Model.Any())
+<div style="margin-top: 20px; border-top: 2px solid #000; padding-top: 10px;"></div>
+
+@foreach (var group in Model.GroupBy(e => e.Category))
 {
-    <table class="table table-bordered">
+    <h3>@group.Key</h3> <!-- Назва категорії -->
+
+    <table class="table">
         <thead>
             <tr>
                 <th>Текст</th>
                 <th>Категорія</th>
-                <th>Підкатегорія</th>
-                <th>Точність (%)</th>
+                @if (ViewBag.ShowSubCategory != null && (bool)ViewBag.ShowSubCategory)
+                {
+                    <th>Підкатегорія</th>
+                }
+                @if (ViewBag.ShowConfidence != null && (bool)ViewBag.ShowConfidence)
+                {
+                    <th>Confidence Score</th>
+                }
             </tr>
         </thead>
         <tbody>
-            @foreach (var entity in Model)
+            @foreach (var entity in group)
             {
                 <tr>
                     <td>@entity.Text</td>
                     <td>@entity.Category</td>
-                    <td>@entity.SubCategory</td>
-                    <td>@entity.ConfidenceScore</td>
+                    @if (ViewBag.ShowSubCategory != null && (bool)ViewBag.ShowSubCategory)
+                    {
+                        <td>@entity.SubCategory</td>
+                    }
+                    @if (ViewBag.ShowConfidence != null && (bool)ViewBag.ShowConfidence)
+                    {
+                        <td>@entity.ConfidenceScore</td>
+                    }
                 </tr>
             }
         </tbody>
     </table>
-}
-else
-{
-    <p>Не знайдено жодних сутностей.</p>
 }
