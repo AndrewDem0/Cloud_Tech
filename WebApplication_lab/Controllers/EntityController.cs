@@ -57,7 +57,7 @@ namespace WebApplication_lab.Controllers
                         Url = entityUrl,
                         DataSource = entity.DataSource,
                         MatchedText = matchedText,
-
+                        ConfidenceScore = entity.Matches.Any() ? (int?)(entity.Matches.First().ConfidenceScore * 100) : null
                     };
 
                     result.Add(model);
