@@ -22,13 +22,12 @@ namespace WebApplication_lab.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();  // Відображаємо вигляд "Index.cshtml"
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(string inputText)
         {
-            // Перевірка на порожній текст
             if (string.IsNullOrEmpty(inputText))
             {
                 ModelState.AddModelError("", "Будь ласка, введіть текст.");
@@ -37,10 +36,7 @@ namespace WebApplication_lab.Controllers
 
             try
             {
-                // Модель результату
                 var healthResult = await AnalyzeHealthText(inputText);
-
-                // Повертаємо результат на вигляд "Result"
                 return View("Result", healthResult);
             }
             catch (Exception ex)
@@ -55,7 +51,8 @@ namespace WebApplication_lab.Controllers
             var result = new HealthResultModel
             {
                 Entities = new List<string>(),
-                Categories = new List<string>()
+                Categories = new List<string>(),
+                ConfidenceScores = new List<int>()
             };
 
             List<string> batchInput = new List<string>() { text };
@@ -72,6 +69,7 @@ namespace WebApplication_lab.Controllers
                         {
                             result.Entities.Add(entity.Text);
                             result.Categories.Add(entity.Category.ToString());
+                            result.ConfidenceScores.Add((int)(entity.ConfidenceScore * 100));
                         }
                     }
                 }

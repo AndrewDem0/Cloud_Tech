@@ -1,18 +1,15 @@
 ﻿@model WebApplication_lab.Models.HealthResultModel
-@{
-    ViewData["Title"] = "Результати аналізу";
-}
 
-<h2>Результати медичного аналізу</h2>
+<h3>Результати медичного аналізу</h3>
 
-@if (Model.Entities.Count > 0)
+@if (Model.Entities?.Count > 0)
 {
-    <h3>Знайдені сутності:</h3>
-    <table class="table">
-        <thead>
+    <table class="table table-bordered">
+        <thead class="thead-light">
             <tr>
                 <th>Сутність</th>
                 <th>Категорія</th>
+                <th>Ймовірність</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +18,7 @@
                 <tr>
                     <td>@Model.Entities[i]</td>
                     <td>@Model.Categories[i]</td>
+                    <td>@Model.ConfidenceScores[i]%</td>
                 </tr>
             }
         </tbody>
@@ -31,4 +29,20 @@ else
     <p>Медичних сутностей не знайдено.</p>
 }
 
-<a asp-action="Index" class="btn btn-secondary">Назад</a>
+<a asp-action="Index" class="btn btn-primary">Назад</a>
+
+<style>
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .thead-light {
+        background-color: #f8f9fa;
+    }
+</style>
