@@ -1,43 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Azure.AI.TextAnalytics;
+using Microsoft.AspNetCore.Mvc;
 using WebApplication_lab.Models;
-using WebApplication_lab.Services;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApplication_lab.Models;
-using WebApplication_lab.Services;
 
 namespace WebApplication_lab.Controllers
 {
     public class HealthController : Controller
     {
-        private readonly HealthService _service;
+        private static readonly AzureKeyCredential credentials =
+            new AzureKeyCredential(Environment.GetEnvironmentVariable("LANGUAGE_KEY"));
 
-        public HealthController(HealthService service)
-        {
-            _service = service;
-        }
+        private static readonly Uri endpoint =
+            new Uri(Environment.GetEnvironmentVariable("LANGUAGE_ENDPOINT"));
 
-        // GET: /Health/Input
+        private static readonly TextAnalyticsClient client =
+            new TextAnalyticsClient(endpoint, credentials);
+
         [HttpGet]
         public IActionResult Index()
         {
-            return View(); // Показуємо форму для введення тексту
+            return View();  // Відображаємо вигляд "Index.cshtml"
         }
 
-        // POST: /Health/Analyze
         [HttpPost]
-        public async Task<IActionResult> Analyze(TextAnalysisInputModel model)
+        public async Task<IActionResult> Index(string inputText)
         {
-            // Перевірка чи валідна модель (чи є текст)
-            if (!ModelState.IsValid)
+            // Перевірка на порожній текст
+            if (string.IsNullOrEmpty(inputText))
             {
-                return View("Index", model);
+                ModelState.AddModelError("", "Будь ласка, введіть текст.");
+                return View();
             }
 
-            // Аналіз тексту через сервіс
-            var result = await _service.AnalyzeAsync(model.Text);
+            try
+            {
+                // Модель результату
+                var healthResult = await AnalyzeHealthText(inputText);
 
-            // Повертаємо View з результатом (Output.cshtml)
-            return View("Result", result);
+                // Повертаємо результат на вигляд "Result"
+                return View("Result", healthResult);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Помилка аналізу: {ex.Message}");
+                return View();
+            }
+        }
+
+        private async Task<HealthResultModel> AnalyzeHealthText(string text)
+        {
+            var result = new HealthResultModel
+            {
+                Entities = new List<string>(),
+                Categories = new List<string>()
+            };
+
+            List<string> batchInput = new List<string>() { text };
+            AnalyzeHealthcareEntitiesOperation healthOperation = await client.StartAnalyzeHealthcareEntitiesAsync(batchInput);
+            await healthOperation.WaitForCompletionAsync();
+
+            await foreach (var documentsInPage in healthOperation.Value)
+            {
+                foreach (var entitiesInDoc in documentsInPage)
+                {
+                    if (!entitiesInDoc.HasError)
+                    {
+                        foreach (var entity in entitiesInDoc.Entities)
+                        {
+                            result.Entities.Add(entity.Text);
+                            result.Categories.Add(entity.Category.ToString());
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -1,12 +1,34 @@
-﻿@model PiiResultModel
+﻿@model WebApplication_lab.Models.PiiResultModel
 
-<h2>Маскований текст:</h2>
-<p>@Model.RedactedText</p>
+@{
+    ViewData["Title"] = "Pii Entity Recognition Results";
+}
 
-<h3>Розпізнані об'єкти:</h3>
-<ul>
-    @foreach (var entity in Model.Entities)
-    {
-        <li>@entity</li>
-    }
-</ul>
+<h2>Pii Entity Recognition Results</h2>
+
+@if (Model != null)
+{
+    <h3>Redacted Text:</h3>
+    <p>@Model.RedactedText</p>
+
+    <h3>Identified Entities:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Entity Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entity in Model.Entities)
+            {
+                <tr>
+                    <td>@entity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No entities were found.</p>
+}
