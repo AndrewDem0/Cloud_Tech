@@ -21,37 +21,41 @@ namespace WebApplication_lab.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();  // Відображаємо вигляд "Index.cshtml"
+            return View();
         }
 
         [HttpPost]
         public IActionResult Index(string inputText)
         {
-            // Перевірка на порожній текст
             if (string.IsNullOrEmpty(inputText))
             {
                 ModelState.AddModelError("", "Будь ласка, введіть текст.");
                 return View();
             }
 
-            // Розпізнавання Pii в тексті
-            var response = client.RecognizePiiEntities(inputText);
-
-            // Модель результату
-            var piiResult = new PiiResultModel
+            try
             {
-                RedactedText = response.Value.RedactedText,  // Текст після заміни PII
-                Entities = new List<string>()
-            };
+                var response = client.RecognizePiiEntities(inputText);
+                var piiResult = new PiiResultModel
+                {
+                    RedactedText = response.Value.RedactedText,
+                    Entities = new List<string>(),
+                    Category = "PII",
+                    ConfidenceScore = null // Не використовуємо загальний ConfidenceScore
+                };
 
-            // Додаємо всі знайдені сутності до списку
-            foreach (var entity in response.Value)
-            {
-                piiResult.Entities.Add(entity.Text);
+                foreach (var entity in response.Value)
+                {
+                    piiResult.Entities.Add($"{entity.Text}|{entity.Category}|{(int)(entity.ConfidenceScore * 100)}");
+                }
+
+                return View("Result", piiResult);
             }
-
-            // Повертаємо результат на вигляд "Result"
-            return View("Result", piiResult);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Помилка аналізу: {ex.Message}");
+                return View();
+            }
         }
     }
 }

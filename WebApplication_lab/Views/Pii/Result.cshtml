@@ -1,28 +1,30 @@
 ﻿@model WebApplication_lab.Models.PiiResultModel
 
-@{
-    ViewData["Title"] = "Pii Entity Recognition Results";
-}
+<h3>Результати аналізу PII</h3>
 
-<h2>Pii Entity Recognition Results</h2>
-
-@if (Model != null)
-{
-    <h3>Redacted Text:</h3>
+<div class="mb-3">
+    <h5>Замаскований текст:</h5>
     <p>@Model.RedactedText</p>
+</div>
 
-    <h3>Identified Entities:</h3>
+@if (Model.Entities?.Count > 0)
+{
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-light">
             <tr>
-                <th>Entity Text</th>
+                <th>Сутність</th>
+                <th>Категорія</th>
+                <th>Ймовірність</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var entity in Model.Entities)
+            @foreach (var entityStr in Model.Entities)
             {
+                var parts = entityStr.Split('|');
                 <tr>
-                    <td>@entity</td>
+                    <td>@parts[0]</td>
+                    <td>@parts[1]</td>
+                    <td>@parts[2]%</td>
                 </tr>
             }
         </tbody>
@@ -30,5 +32,7 @@
 }
 else
 {
-    <p>No entities were found.</p>
+    <p>PII-сутностей не знайдено.</p>
 }
+
+<a asp-action="Index" class="btn btn-primary">Назад</a>
