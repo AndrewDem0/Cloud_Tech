@@ -1,0 +1,12 @@
+﻿@model PiiResultModel
+
+<h2>Маскований текст:</h2>
+<p>@Model.RedactedText</p>
+
+<h3>Розпізнані об'єкти:</h3>
+<ul>
+    @foreach (var entity in Model.Entities)
+    {
+        <li>@entity</li>
+    }
+</ul>
