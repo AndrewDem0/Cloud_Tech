@@ -1,7 +1,15 @@
-﻿@model TextAnalysisInputModel
+﻿@{
+    ViewData["Title"] = "Медичний аналіз тексту";
+}
 
-<form asp-action="Analyze" method="post">
-    <textarea asp-for="Text"></textarea>
-    <span asp-validation-for="Text"></span>
-    <button type="submit">Аналізувати</button>
+<h2>Аналіз медичного тексту</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="inputText">Введіть текст для аналізу:</label>
+        <textarea class="form-control" id="inputText" name="inputText" rows="5"></textarea>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Аналізувати</button>
 </form>

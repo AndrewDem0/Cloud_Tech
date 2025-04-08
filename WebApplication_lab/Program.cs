@@ -11,8 +11,6 @@ namespace WebApplication_lab
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient<PiiService>();
-            builder.Services.AddHttpClient<HealthService>();
 
             var app = builder.Build();
 
