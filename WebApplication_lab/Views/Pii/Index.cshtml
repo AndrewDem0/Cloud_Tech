@@ -1,0 +1,7 @@
+﻿@model TextAnalysisInputModel
+
+<form asp-action="Analyze" method="post">
+    <textarea asp-for="Text"></textarea>
+    <span asp-validation-for="Text"></span>
+    <button type="submit">Аналізувати</button>
+</form>

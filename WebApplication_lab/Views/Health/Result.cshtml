@@ -1,0 +1,17 @@
+﻿@model HealthResultModel
+
+<h3>Розпізнані об'єкти:</h3>
+<ul>
+    @foreach (var entity in Model.Entities)
+    {
+        <li>@entity</li>
+    }
+</ul>
+
+<h3>Категорії:</h3>
+<ul>
+    @foreach (var cat in Model.Categories)
+    {
+        <li>@cat</li>
+    }
+</ul>
