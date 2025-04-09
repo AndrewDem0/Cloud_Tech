@@ -4,18 +4,150 @@
     ViewData["Title"] = "Translation";
 }
 
-<h2>Translate Text (Azure Translation Ai)</h2>
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: Arial, sans-serif;
+    }
 
-<form method="post" asp-action="Translate">
-    <div class="form-group">
-        <label for="InputText">Enter text:</label>
-        <textarea class="form-control" id="InputText" name="InputText" rows="4" required></textarea>
-    </div>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding-top: 50px;
+    }
 
-    <div class="form-group">
-        <label for="TargetLanguage">Target Language:</label>
-        <input type="text" class="form-control" id="TargetLanguage" name="TargetLanguage" required />
-    </div>
+    .form-group label {
+        font-weight: bold;
+        color: #4e73df;
+    }
 
-    <button type="submit" class="btn btn-primary">Translate</button>
-</form>
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid #d1d3e2;
+        background-color: #ffffff;
+    }
+
+    .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 8px rgba(78, 115, 223, 0.5);
+    }
+
+    .btn-primary {
+        background-color: #4e73df;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #2e59d9;
+        cursor: pointer;
+    }
+
+    .result-table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .result-table th, .result-table td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    .result-table th {
+        background-color: #4e73df;
+        color: white;
+    }
+
+    .result-table td {
+        background-color: #f8f9fc;
+    }
+
+    .alert {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #d4edda;
+        color: #155724;
+        border-radius: 5px;
+    }
+
+    .readonly-input {
+        background-color: #f8f9fc;
+        border: 1px solid #ddd;
+        color: #495057;
+        padding: 10px;
+        font-size: 14px;
+        width: 100%;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container">
+    <h2>Translate Text (Azure Translation AI)</h2>
+
+    <form method="post" asp-action="Translate">
+        <div class="form-group">
+            <label for="InputText1">Enter text (Source Language):</label>
+            <textarea class="form-control" id="InputText1" name="InputText1" rows="4" required>@Model.InputText1</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="SourceLanguage">Source Language:</label>
+            <select class="form-control" id="SourceLanguage" name="SourceLanguage" required>
+                @{
+                    var languages = ViewBag.Languages as Dictionary<string, string> ?? new Dictionary<string, string>();
+                    var sourceLang = Model?.SourceLanguage ?? languages.Keys.FirstOrDefault();
+                }
+                @foreach (var lang in languages)
+                {
+                    <option value="@lang.Key" selected="@(sourceLang == lang.Key)">@lang.Value</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="TargetLanguage">Target Language:</label>
+            <select class="form-control" id="TargetLanguage" name="TargetLanguage" required>
+                @{
+                    var targetLang = Model?.TargetLanguage ?? languages.Keys.Skip(1).FirstOrDefault() ?? languages.Keys.FirstOrDefault();
+                }
+                @foreach (var lang in languages)
+                {
+                    <option value="@lang.Key" selected="@(targetLang == lang.Key)">@lang.Value</option>
+                }
+            </select>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">Translate</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Result))
+    {
+        <h3>Translation Result:</h3>
+
+        <!-- Статичне поле для результату -->
+        <textarea class="readonly-input" rows="4" readonly>@Model.Result</textarea>
+
+        <table class="result-table">
+            <tr>
+                <th>Source Language</th>
+                <th>Target Language</th>
+                <th>Confidence</th>
+            </tr>
+            <tr>
+                <td>@Model.SourceLanguage</td>
+                <td>@Model.TargetLanguage</td>
+                <td>@Model.Confidence%</td>
+            </tr>
+        </table>
+
+        <div class="alert">
+            Translation completed successfully!
+        </div>
+    }
+</div>
