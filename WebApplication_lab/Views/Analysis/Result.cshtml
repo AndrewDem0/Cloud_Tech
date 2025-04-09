@@ -1,0 +1,64 @@
+﻿@model WebApplication_lab.Models.AnalysisResult
+
+<h3>Результати обробки</h3>
+
+<div class="mb-4">
+    <h5>Оригінальний текст:</h5>
+    <div class="p-3 bg-light">@Model.OriginalText</div>
+</div>
+
+<div class="mb-4">
+    <h5>Оброблений текст:</h5>
+    <div class="p-3 bg-light">@Html.Raw(Model.ProcessedText)</div>
+    <small class="text-muted">PII замінено на ***, медичні терміни підкреслені</small>
+</div>
+
+@if (Model.MedicalEntities.Count > 0)
+{
+    <h4>Медичні сутності:</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Текст</th>
+                <th>Категорія</th>
+                <th>Впевненість</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MedicalEntities)
+            {
+                <tr>
+                    <td>@item.Text</td>
+                    <td>@item.Category</td>
+                    <td>@item.Confidence%</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.HiddenPii.Count > 0)
+{
+    <h4>Прихована PII:</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Категорія</th>
+                <th>Оригінальний текст</th>
+                <th>Впевненість</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.HiddenPii)
+            {
+                <tr>
+                    <td>@item.Category</td>
+                    <td>@item.Text</td>
+                    <td>@item.Confidence%</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn btn-primary">Назад</a>
