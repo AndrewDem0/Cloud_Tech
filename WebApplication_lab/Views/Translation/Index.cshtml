@@ -1,0 +1,21 @@
+﻿@model WebApplication_lab.Models.TranslationRequest
+
+@{
+    ViewData["Title"] = "Translation";
+}
+
+<h2>Translate Text (Azure Translation Ai)</h2>
+
+<form method="post" asp-action="Translate">
+    <div class="form-group">
+        <label for="InputText">Enter text:</label>
+        <textarea class="form-control" id="InputText" name="InputText" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="TargetLanguage">Target Language:</label>
+        <input type="text" class="form-control" id="TargetLanguage" name="TargetLanguage" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Translate</button>
+</form>
