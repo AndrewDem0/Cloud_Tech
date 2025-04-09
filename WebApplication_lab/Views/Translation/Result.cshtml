@@ -1,0 +1,32 @@
+﻿@model WebApplication_lab.Models.TranslationRequest
+
+@{
+    ViewData["Title"] = "Translation Result";
+}
+
+<h2>Translation Result</h2>
+
+@if (!string.IsNullOrWhiteSpace(Model.InputText))
+{
+    <div class="alert alert-info">
+        <strong>Original Text:</strong> @Model.InputText
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Result))
+{
+    <div class="alert alert-success">
+        <strong>Translated Text:</strong> @Model.Result
+    </div>
+}
+
+@if (Model.Confidence > 0)
+{
+    <div class="alert alert-warning">
+        <strong>Confidence Level:</strong> @Model.Confidence%
+    </div>
+}
+
+<div>
+    <a href="@Url.Action("Index", "Translation")" class="btn btn-primary">Back</a>
+</div>
