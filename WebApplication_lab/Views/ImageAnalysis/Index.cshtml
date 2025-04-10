@@ -1,0 +1,48 @@
+﻿@model WebApplication_lab.Models.ImageAnalysisResult
+
+@{
+    ViewData["Title"] = "Image Analysis";
+}
+
+<div class="container" style="max-width: 700px; margin: 40px auto; font-family: sans-serif;">
+    <h2>Analyze Image (Azure AI Vision)</h2>
+
+    <form method="post" enctype="multipart/form-data" asp-action="Analyze">
+        <div class="form-group">
+            <label>Upload Image:</label>
+            <input type="file" name="ImageFile" class="form-control" onchange="previewImage(event)" required />
+        </div>
+
+        <div style="margin-top: 20px;">
+            <img id="preview" src="@Model.ImageUrl" style="max-width: 100%; border-radius: 8px; display:@(string.IsNullOrEmpty(Model.ImageUrl) ? "none" : "block")" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Analyze</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <div style="margin-top: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background: #f9f9f9;">
+            <h4>Analysis Result:</h4>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Confidence:</strong> @Model.Confidence.ToString("P")</p>
+            <p><strong>Tags:</strong> @string.Join(", ", Model.Tags)</p>
+        </div>
+    }
+</div>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
