@@ -24,6 +24,7 @@ Release/
 WebApplication_lab/obj/
 WebApplication_lab/bin/
 WebApplication_lab/obj/Debug/
+WebApplication_lab/wwwroot/uploads/
 WebApplication_lab/obj/Debug/net8.0/
 
 # 🔹 ASP.NET специфічні файли
