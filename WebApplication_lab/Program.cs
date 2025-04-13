@@ -1,58 +1,39 @@
-﻿using Microsoft.Azure.CognitiveServices.Vision.Face;
-using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-class Program
+namespace WebApplication_lab
 {
-    // Замінити на свій ключ та endpoint від Face API (не OCR!)
-    static readonly string SubscriptionKey = Environment.GetEnvironmentVariable("FACE_APIKEY") ?? "<apikey>";
-    static readonly string Endpoint = Environment.GetEnvironmentVariable("FACE_ENDPOINT") ?? "<endpoint>";
-
-    static async Task Main(string[] args)
+    public class Program
     {
-        IFaceClient faceClient = new FaceClient(new ApiKeyServiceClientCredentials(SubscriptionKey))
+        public static void Main(string[] args)
         {
-            Endpoint = Endpoint
-        };
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Шляхи до фото
-        string imagePath1 = @"C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\photo\Face.jpg";
-        string imagePath2 = @"C:\work prog\ASPCoreMVC\Cloud_Tech\WebApplication_lab\photo\photo_2025-04-10_13-34-55.jpg";
+            builder.Services.AddControllersWithViews();
 
-        Console.WriteLine("=== Аналіз фото 1 ===");
-        await CheckFaceAsync(faceClient, imagePath1);
+            var app = builder.Build();
 
-        Console.WriteLine("\n=== Аналіз фото 2 ===");
-        await CheckFaceAsync(faceClient, imagePath2);
-    }
-
-    static async Task CheckFaceAsync(IFaceClient client, string imagePath)
-    {
-        try
-        {
-            using Stream imageStream = File.OpenRead(imagePath);
-            var detectedFaces = await client.Face.DetectWithStreamAsync(
-                imageStream,
-                returnFaceId: false,
-                detectionModel: DetectionModel.Detection01
-            );
-
-            if (detectedFaces.Count == 0)
-                Console.WriteLine($"❌ Обличчя не знайдено у: {Path.GetFileName(imagePath)}");
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             else
-                Console.WriteLine($"ТОЧНО Знайдено {detectedFaces.Count} облич у: {Path.GetFileName(imagePath)}");
-        }
-        catch (APIErrorException ex)
-        {
-            Console.WriteLine("🚫 Помилка доступу до Face API:");
-            Console.WriteLine(ex.Body.Error.Message);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("⚠️ Сталася помилка:");
-            Console.WriteLine(ex.Message);
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.Run();
         }
     }
 }

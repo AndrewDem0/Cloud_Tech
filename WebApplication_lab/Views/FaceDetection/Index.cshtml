@@ -1,0 +1,82 @@
+﻿@model WebApplication_lab.Models.FaceDetectionResult
+
+@{
+    ViewData["Title"] = "Face Detection";
+}
+
+<div class="container" style="max-width: 700px; margin: 40px auto; font-family: sans-serif;">
+    <h2>Face Detection (Azure Face API)</h2>
+
+    <form method="post" enctype="multipart/form-data" asp-action="Index">
+        <div class="form-group">
+            <label>Upload Image:</label>
+            <input type="file" name="ImageFile" class="form-control" onchange="previewImage(event)" required />
+        </div>
+
+        <div style="margin-top: 20px;">
+            <img id="preview" src="@Model.ImageUrl" style="max-width: 100%; border-radius: 8px; display:@(string.IsNullOrEmpty(Model.ImageUrl) ? "none" : "block")" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Analyze</button>
+    </form>
+
+    @if (Model.Faces.Count > 0)
+    {
+        <div style="margin-top: 30px;">
+            <h4>🔍 Found @Model.FaceCount face(s)</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Left</th>
+                        <th>Top</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Faces.Count; i++)
+                    {
+                        var face = Model.Faces[i];
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@face.Left</td>
+                            <td>@face.Top</td>
+                            <td>@face.Width</td>
+                            <td>@face.Height</td>
+                            <td>@(face.Confidence.ToString("P0"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px; padding: 15px; background-color: #f1f1f1; border-radius: 8px;">
+                <h5>ℹ️ Пояснення координат обличчя:</h5>
+                <ul>
+                    <li><strong>Left</strong> — відступ від лівого краю зображення до початку обличчя (в пікселях)</li>
+                    <li><strong>Top</strong> — відступ від верхнього краю зображення</li>
+                    <li><strong>Width</strong> — ширина прямокутника, що охоплює обличчя</li>
+                    <li><strong>Height</strong> — висота цього прямокутника</li>
+                    <li><strong>Confidence</strong> — ймовірність (точність) того, що це дійсно обличчя</li>
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
