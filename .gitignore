@@ -23,6 +23,7 @@ Release/
 # Ігноруємо службові файли та компіляційні директорії
 WebApplication_lab/obj/
 WebApplication_lab/bin/
+WebApplication_lab/appsettings.json
 WebApplication_lab/obj/Debug/
 WebApplication_lab/wwwroot/uploads/
 WebApplication_lab/obj/Debug/net8.0/
@@ -55,5 +56,3 @@ Migrations/
 .tmp/
 *.tmp
 *.cache
-
-appsettings.json
