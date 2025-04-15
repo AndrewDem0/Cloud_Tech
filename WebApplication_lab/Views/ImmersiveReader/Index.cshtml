@@ -1,0 +1,68 @@
+﻿@model WebApplication_lab.Models.ImmersiveReaderModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@section Styles {
+    <style type="text/css">
+        .immersive-reader-button {
+            background-color: white;
+            margin-top: 5px;
+            border: 1px solid black;
+            float: right;
+        }
+    </style>
+}
+
+<div class="container">
+    <button class="immersive-reader-button"
+            data-button-style="iconAndText"
+            data-locale="en"
+            data-token="@Model.Token"
+            data-subdomain="@Model.Subdomain">
+        Launch Immersive Reader
+    </button>
+
+    <h1 id="ir-title">@Model.Title</h1>
+    <div id="ir-content" lang="en-us">
+        <p>
+            @Model.Content
+            <ul>
+                <li>Shows content in a minimal reading view</li>
+                <li>Displays pictures of commonly used words</li>
+                <li>Highlights nouns, verbs, adjectives, and adverbs</li>
+                <li>Reads your content out loud to you</li>
+                <li>Translates your content into another language</li>
+                <li>Breaks down words into syllables</li>
+            </ul>
+        </p>
+
+        <h3>The Immersive Reader is available in many languages.</h3>
+        <p lang="es-es">El Lector inmersivo está disponible en varios idiomas.</p>
+        <p lang="zh-cn">沉浸式阅读器支持许多语言</p>
+        <p lang="de-de">Der plastische Reader ist in vielen Sprachen verfügbar.</p>
+        <p lang="ar-eg" dir="rtl" style="text-align:right">يتوفر "القارئ الشامل" في العديد من اللغات.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.microsoft.com/immersive-reader.js"></script>
+    <script>
+        const button = document.querySelector('.immersive-reader-button');
+        button.addEventListener('click', function () {
+            const token = button.getAttribute('data-token');
+            const subdomain = button.getAttribute('data-subdomain');
+
+            // Використовуємо API для запуску Immersive Reader
+            ImmersiveReader.launchAsync({
+                token: token,
+                subdomain: subdomain,
+                title: document.querySelector("#ir-title").innerText,
+                content: document.querySelector("#ir-content").innerText
+            }).catch(function (error) {
+                console.error("Error launching Immersive Reader: ", error);
+            });
+        });
+    </script>
+}

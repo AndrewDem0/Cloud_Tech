@@ -12,6 +12,7 @@ namespace WebApplication_lab
 
             builder.Services.AddControllersWithViews();
 
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

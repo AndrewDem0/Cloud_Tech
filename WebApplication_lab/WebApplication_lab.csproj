@@ -16,6 +16,7 @@
     <PackageReference Include="Azure.Storage.Blobs.Batch" Version="12.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.Face" Version="2.8.0-preview.3" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.70.2" />
   </ItemGroup>
 
 </Project>
