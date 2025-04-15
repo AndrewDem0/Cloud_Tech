@@ -27,6 +27,8 @@ WebApplication_lab/appsettings.json
 WebApplication_lab/obj/Debug/
 WebApplication_lab/wwwroot/uploads/
 WebApplication_lab/obj/Debug/net8.0/
+WebApplication_lab/appsettings.json
+
 
 # 🔹 ASP.NET специфічні файли
 App_Data/
