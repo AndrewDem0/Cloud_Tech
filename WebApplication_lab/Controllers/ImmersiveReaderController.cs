@@ -62,6 +62,21 @@ namespace WebApplication_lab.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetTokenAndSubdomain()
+        {
+            try
+            {
+                string token = await GetTokenAsync();
+                return Json(new { token = token, subdomain = Subdomain });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error acquiring token: ", e);
+                return Json(new { error = "Unable to acquire token." });
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             try

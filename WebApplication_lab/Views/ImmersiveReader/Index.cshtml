@@ -1,7 +1,7 @@
 ﻿@model WebApplication_lab.Models.ImmersiveReaderModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = "Immersive Reader C# Quickstart";
 }
 
 @section Styles {
@@ -16,53 +16,112 @@
 }
 
 <div class="container">
-    <button class="immersive-reader-button"
-            data-button-style="iconAndText"
-            data-locale="en"
-            data-token="@Model.Token"
-            data-subdomain="@Model.Subdomain">
-        Launch Immersive Reader
-    </button>
+    <button class="immersive-reader-button" data-button-style="iconAndText" data-locale="en"></button>
 
-    <h1 id="ir-title">@Model.Title</h1>
+    <h1 id="ir-title">About Immersive Reader</h1>
     <div id="ir-content" lang="en-us">
         <p>
-            @Model.Content
+            Immersive Reader is a tool that implements proven techniques to improve reading comprehension for emerging readers, language learners, and people with learning differences.
+            The Immersive Reader is designed to make reading more accessible for everyone. The Immersive Reader
             <ul>
-                <li>Shows content in a minimal reading view</li>
-                <li>Displays pictures of commonly used words</li>
-                <li>Highlights nouns, verbs, adjectives, and adverbs</li>
-                <li>Reads your content out loud to you</li>
-                <li>Translates your content into another language</li>
-                <li>Breaks down words into syllables</li>
+                <li>
+                    Shows content in a minimal reading view
+                </li>
+                <li>
+                    Displays pictures of commonly used words
+                </li>
+                <li>
+                    Highlights nouns, verbs, adjectives, and adverbs
+                </li>
+                <li>
+                    Reads your content out loud to you
+                </li>
+                <li>
+                    Translates your content into another language
+                </li>
+                <li>
+                    Breaks down words into syllables
+                </li>
             </ul>
         </p>
-
-        <h3>The Immersive Reader is available in many languages.</h3>
-        <p lang="es-es">El Lector inmersivo está disponible en varios idiomas.</p>
-        <p lang="zh-cn">沉浸式阅读器支持许多语言</p>
-        <p lang="de-de">Der plastische Reader ist in vielen Sprachen verfügbar.</p>
-        <p lang="ar-eg" dir="rtl" style="text-align:right">يتوفر "القارئ الشامل" في العديد من اللغات.</p>
+        <h3>
+            The Immersive Reader is available in many languages.
+        </h3>
+        <p lang="es-es">
+            El Lector inmersivo está disponible en varios idiomas.
+        </p>
+        <p lang="zh-cn">
+            沉浸式阅读器支持许多语言
+        </p>
+        <p lang="de-de">
+            Der plastische Reader ist in vielen Sprachen verfügbar.
+        </p>
+        <p lang="ar-eg" dir="rtl" style="text-align:right">
+            يتوفر \"القارئ الشامل\" في العديد من اللغات.
+        </p>
     </div>
 </div>
-
-@section Scripts {
-    <script src="https://cdn.microsoft.com/immersive-reader.js"></script>
+@section Scripts
+{
+    <script src="https://ircdname.azureedge.net/immersivereadersdk/immersive-reader-sdk.1.4.0.js"></script>
     <script>
-        const button = document.querySelector('.immersive-reader-button');
-        button.addEventListener('click', function () {
-            const token = button.getAttribute('data-token');
-            const subdomain = button.getAttribute('data-subdomain');
-
-            // Використовуємо API для запуску Immersive Reader
-            ImmersiveReader.launchAsync({
-                token: token,
-                subdomain: subdomain,
-                title: document.querySelector("#ir-title").innerText,
-                content: document.querySelector("#ir-content").innerText
-            }).catch(function (error) {
-                console.error("Error launching Immersive Reader: ", error);
+        function getTokenAndSubdomainAsync() {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: "@Url.Action("GetTokenAndSubdomain", "ImmersiveReader")", // 🔁 ТУТ ЗАМІНА
+                    type: "GET",
+                    success: function (data) {
+                        if (data.error) {
+                            reject(data.error);
+                        } else {
+                            resolve(data);
+                        }
+                    },
+                    error: function (err) {
+                        reject(err);
+                    }
+                });
             });
+        }
+
+        $(".immersive-reader-button").click(function () {
+            handleLaunchImmersiveReader();
         });
+
+        function handleLaunchImmersiveReader() {
+            getTokenAndSubdomainAsync()
+                .then(function (response) {
+                    const token = response["token"];
+                    const subdomain = response["subdomain"];
+
+                    const data = {
+                        title: $("#ir-title").text(),
+                        chunks: [{
+                            content: $("#ir-content").html(),
+                            mimeType: "text/html"
+                        }]
+                    };
+
+                    const options = {
+                        onExit: exitCallback,
+                        uiZIndex: 2000
+                    };
+
+                    ImmersiveReader.launchAsync(token, subdomain, data, options)
+                        .catch(function (error) {
+                            alert("Error in launching the Immersive Reader. Check the console.");
+                            console.log(error);
+                        });
+                })
+                .catch(function (error) {
+                    alert("Error in getting the Immersive Reader token and subdomain. Check the console.");
+                    console.log(error);
+                });
+        }
+
+        function exitCallback() {
+            console.log("Immersive Reader закрився.");
+        }
     </script>
 }
+
