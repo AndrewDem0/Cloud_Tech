@@ -4,6 +4,10 @@ using System;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using WebApplication_lab.Models;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication_lab.Controllers
 {
@@ -74,6 +78,36 @@ namespace WebApplication_lab.Controllers
                 Debug.WriteLine("Error acquiring token: ", e);
                 return Json(new { error = "Unable to acquire token." });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPdf(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            string extractedText = "";
+
+            // Завантажуємо та витягуємо текст з PDF
+            using (var stream = file.OpenReadStream())
+            using (var pdf = PdfDocument.Open(stream))
+            {
+                foreach (Page page in pdf.GetPages())
+                {
+                    extractedText += page.Text + "\n";
+                }
+            }
+
+            string token = await GetTokenAsync();
+
+            // Повертаємо токен, субдомен і витягнутий текст
+            return Json(new
+            {
+                token = token,
+                subdomain = Subdomain,
+                content = extractedText,
+                title = file.FileName
+            });
         }
 
         [HttpGet]
